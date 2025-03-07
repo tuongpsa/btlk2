@@ -1,0 +1,2 @@
+MinGW/bin/SDL2_ttf.dll filter=lfs diff=lfs merge=lfs -text
+MinGW/lib/libSDL2_ttf.a filter=lfs diff=lfs merge=lfs -text
