@@ -37,7 +37,7 @@ void renderText(const char* text, int x, int y, SDL_Color color, bool isSelected
 }
 
 int selectedOption = 0;
-void menuLoop(SDL_Texture* backgroundTexture, Mix_Music* menusound) {
+void menuLoop(SDL_Texture* backgroundTexture, Mix_Music* menusound, Mix_Chunk* choosesoundEffect) {
     SDL_Event e;
     bool running = true;
     Mix_PlayMusic(menusound, -1);
@@ -54,6 +54,7 @@ void menuLoop(SDL_Texture* backgroundTexture, Mix_Music* menusound) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) running = false;
             if (e.type == SDL_KEYDOWN) {
+                Mix_PlayChannel(-1, choosesoundEffect, 0);
                 if (e.key.keysym.sym == SDLK_UP) selectedOption = (selectedOption - 1 + 2) % 2; 
                 if (e.key.keysym.sym == SDLK_DOWN) selectedOption = (selectedOption + 1) % 2;   
                 if (e.key.keysym.sym == SDLK_RETURN) {
@@ -190,9 +191,9 @@ int main() {
     Mix_Music* menuMusic = Mix_LoadMUS("assets/menusound.mp3");
     Mix_Music* gameMusic = Mix_LoadMUS("assets/theme.mp3");
     Mix_Music* gameoverMusic = Mix_LoadMUS("assets/gameoversound.mp3");
-    
     Mix_Chunk* hitsoundEffect = Mix_LoadWAV("assets/hitsound.wav");
-
+    Mix_Chunk* popsoundEffect = Mix_LoadWAV("assets/pop.wav");
+    Mix_Chunk* choosesoundEffect = Mix_LoadWAV("assets/choosesound.wav");
 
     bool quit = false;
     SDL_Event e;
@@ -205,7 +206,7 @@ SDL_Texture* ballTexture = IMG_LoadTexture(renderer, "assets/pig.png");
 SDL_Texture* brickTexture = IMG_LoadTexture(renderer, "assets/br3.png");
 std::string path = "assets/back" + std::to_string(leveltmp) + ".png";
 SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, path.c_str());
-menuLoop( backgroundTexture, menuMusic);
+menuLoop( backgroundTexture, menuMusic, choosesoundEffect);
 Mix_PlayMusic(gameMusic, -1);
     float ballX = (width / 2) - radius;
     float ballY = height - 20.01 - (2 * radius);
@@ -400,6 +401,7 @@ for (int i = 0; i < steps; i++) {
         
         if (ballY + radius * 2 >= barY && ballY + radius <= barY + barHeight && ballX + radius * 2 > barX && ballX < barX + barWidth) {
             if (ballVelY > 0) {  
+                Mix_PlayChannel(-1, popsoundEffect, 0);
                 ballVelY = -ballVelY;  
             }
         }
