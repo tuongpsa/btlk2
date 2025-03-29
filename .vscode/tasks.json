@@ -3,12 +3,12 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
-            "command": "E:/project/MinGW/bin/g++.exe",
+            "command": "E:/btlk2/MinGW/bin/g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "E:\\project\\src\\*.cpp",
-                "-IE:\\project\\header\\",
+                "E:\\btlk2\\src\\*.cpp",
+                "-IE:\\btlk2\\header\\",
                 "-lmingw32",
                 "-lSDL2main",
                 "-lSDL2",
@@ -16,10 +16,10 @@
                 "-lSDL2_mixer",
                 "-lSDL2_ttf",
                 "-o",
-                "E:\\project\\game.exe"
+                "E:\\btlk2\\game.exe"
             ],
             "options": {
-                "cwd": "E:/project/MinGW/bin"
+                "cwd": "E:/btlk2/MinGW/bin"
             },
             "problemMatcher": [
                 "$gcc"
