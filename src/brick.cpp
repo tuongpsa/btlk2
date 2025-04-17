@@ -1,5 +1,6 @@
 #include "brick.h"
 #include <cstdlib>
+#include <varball+bar.h>
 
 std::vector<Brick> bricks;  
 int maxbrick = 5;           

@@ -11,7 +11,6 @@
 #include "../header/brick.h"
 #include "../header/menu.h"
 #include "../header/varball+bar.h"
-
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 TTF_Font* font = nullptr;
@@ -32,18 +31,15 @@ int main() {
     SDL_Event e;
     TTF_Init();
     font = TTF_OpenFont("PixelGame.otf", 40);
-SDL_Texture* paddleTexture = IMG_LoadTexture(renderer, "assets/thanh1.png");
-SDL_Texture* ballTexture = IMG_LoadTexture(renderer, "assets/pig.png");
-SDL_Texture* brickTexture = IMG_LoadTexture(renderer, "assets/br3.png");
-std::string path = "assets/back" + std::to_string(leveltmp) + ".png";
-SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, path.c_str());
+    SDL_Texture* paddleTexture = IMG_LoadTexture(renderer, "assets/thanh1.png");
+    SDL_Texture* ballTexture = IMG_LoadTexture(renderer, "assets/pig.png");
+    SDL_Texture* brickTexture = IMG_LoadTexture(renderer, "assets/br3.png");
+    std::string path = "assets/back" + std::to_string(leveltmp) + ".png";
+    SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, path.c_str());
 menuLoop( backgroundTexture, menuMusic, choosesoundEffect);
 Mix_PlayMusic(gameMusic, -1);
-
     taogach();
-
     Uint32 lastTime = SDL_GetTicks();
-    
     while (!quit) {
         Uint32 currentTime = SDL_GetTicks();
         float deltaTime = (currentTime - lastTime) / 1000.0f; 
@@ -55,6 +51,7 @@ Mix_PlayMusic(gameMusic, -1);
             }
         }
         if (isAllBricksDestroyed() ) {
+            
             maxbrick += 5;
             level ++;
             leveltmp++;
@@ -150,12 +147,10 @@ for (int i = 0; i < 8; i++) {
                     Mix_PlayChannel(-1, hitsoundEffect, 0);
                     brick.isDestroyed = true;
                 }
-
                 float overlapLeft = std::abs((nextX + radius * 2) - brick.x);
                 float overlapRight = std::abs((brick.x + brick.rect.w) - nextX);
                 float overlapTop = std::abs((nextY + radius * 2) - brick.y);
                 float overlapBottom = std::abs((brick.y + brick.rect.h) - nextY);
-
                 float minHorizontal = std::min(overlapLeft, overlapRight);
                 float minVertical = std::min(overlapTop, overlapBottom);
 
@@ -166,7 +161,6 @@ for (int i = 0; i < 8; i++) {
                     ballVelX = -ballVelX;
                     collisionX = true;
                 }
-
                 break; 
             }
         }
@@ -277,12 +271,9 @@ SDL_Delay(500);
             }
         
         SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-        
         renderBricks(renderer, brickTexture);
         int textW, textH;
 SDL_Color textColor = {255, 255, 255, 255};  
-
-
 std::string levelText = "Level: " + std::to_string(level);
 TTF_SizeText(font, levelText.c_str(), &textW, &textH);
 SDL_Rect levelRect = {10, 10, textW, textH};  
@@ -290,13 +281,11 @@ SDL_Texture* levelMessage = SDL_CreateTextureFromSurface(renderer, TTF_RenderTex
 SDL_RenderCopy(renderer, levelMessage, NULL, &levelRect);
 SDL_DestroyTexture(levelMessage);
 
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_Rect ballRect = { (int)ballX, (int)ballY, radius * 2, radius * 2 };
         SDL_RenderCopy(renderer, ballTexture, NULL, &ballRect);
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_Rect paddleRect = { (int)barX, (int)barY, barWidth, barHeight };
         SDL_RenderCopy(renderer, paddleTexture, NULL, &paddleRect);
-        
         SDL_RenderPresent(renderer);
     }
     Mix_FreeMusic(menuMusic);
