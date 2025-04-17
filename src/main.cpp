@@ -67,7 +67,7 @@ Mix_PlayMusic(gameMusic, -1);
             SDL_Surface* textSurface = TTF_RenderText_Solid(font, "YOU WIN!", textColor);
             SDL_Texture* message1 = SDL_CreateTextureFromSurface(renderer, textSurface);
             TTF_SizeText(font, "YOU WIN!", &textW, &textH);
-            SDL_Rect messageRect1 = {width / 2 - textW / 2, height / 3 - textH / 2, textW, textH};
+            SDL_Rect messageRect1 = {(int)width / 2 -(int)textW / 2, (int)height / 3 - textH / 2, textW, textH};
             SDL_RenderCopy(renderer, message1, NULL, &messageRect1);
             SDL_RenderPresent(renderer); 
             SDL_FreeSurface(textSurface);
@@ -92,13 +92,13 @@ Mix_PlayMusic(gameMusic, -1);
     renderBricks(renderer, brickTexture);
 int textW, textH;
 TTF_SizeText(font, "LEVEL UP!", &textW, &textH);
-SDL_Rect messageRect = {width / 2 - textW / 2, height / 2 - textH / 2 + 100, textW, textH}; 
+SDL_Rect messageRect = {(int)width / 2 -textW / 2,(int) height / 2 - textH / 2 + 100, textW, textH}; 
 for (int i = 0; i < 8; i++) {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-    SDL_Rect paddleRect = { (int)barX, (int)barY, barWidth, barHeight };
+    SDL_Rect paddleRect = { (int)barX, (int)barY, (int)barWidth,(int) barHeight };
     SDL_RenderCopy(renderer, paddleTexture, NULL, &paddleRect);
-    SDL_Rect ballRect = { (int)ballX, (int)ballY, radius * 2, radius * 2 };
+    SDL_Rect ballRect = { (int)ballX, (int)ballY,(int) radius * 2, (int)radius * 2 };
     SDL_RenderCopy(renderer, ballTexture, NULL, &ballRect);
     if (i % 2 == 0) {  
         SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "LEVEL UP!", textColor));
@@ -205,20 +205,20 @@ int textW, textH;
 SDL_Color textColor = {255, 255, 255, 255}; 
 Mix_PlayMusic(gameoverMusic, -1);
 TTF_SizeText(font, "GAME OVER!", &textW, &textH);
-SDL_Rect messageRect1 = {width / 2 - textW / 2, height / 3 - textH / 2, textW, textH};
+SDL_Rect messageRect1 = {(int)width / 2 - textW / 2,(int) height / 3 - textH / 2, textW, textH};
 SDL_Texture* message1 = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "GAME OVER!", textColor));
 SDL_RenderCopy(renderer, message1, NULL, &messageRect1);
 SDL_DestroyTexture(message1);
 
 
 TTF_SizeText(font, "Press any key to restart!", &textW, &textH);
-SDL_Rect messageRect2 = {width / 2 - textW / 2, height / 2 - textH / 2, textW, textH};
+SDL_Rect messageRect2 = {(int)width / 2 - textW / 2, (int)height / 2 - textH / 2, textW, textH};
 SDL_Texture* message2 = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "Press any key to restart", textColor));
 SDL_RenderCopy(renderer, message2, NULL, &messageRect2);
 SDL_DestroyTexture(message2);
 
 TTF_SizeText(font, "Press ESC to quit", &textW, &textH);
-SDL_Rect messageRect3 = {width / 2 - textW / 2, height * 2 / 3 - textH / 2, textW, textH};
+SDL_Rect messageRect3 = {(int)width / 2 - textW / 2,(int) height * 2 / 3 - textH / 2, textW, textH};
 SDL_Texture* message3 = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "Press ESC to quit", textColor));
 SDL_RenderCopy(renderer, message3, NULL, &messageRect3);
 SDL_DestroyTexture(message3);
@@ -281,10 +281,10 @@ SDL_Texture* levelMessage = SDL_CreateTextureFromSurface(renderer, TTF_RenderTex
 SDL_RenderCopy(renderer, levelMessage, NULL, &levelRect);
 SDL_DestroyTexture(levelMessage);
 
-        SDL_Rect ballRect = { (int)ballX, (int)ballY, radius * 2, radius * 2 };
+        SDL_Rect ballRect = { (int)ballX, (int)ballY,(int) radius * 2,(int) radius * 2 };
         SDL_RenderCopy(renderer, ballTexture, NULL, &ballRect);
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_Rect paddleRect = { (int)barX, (int)barY, barWidth, barHeight };
+        SDL_Rect paddleRect = { (int)barX, (int)barY, (int)barWidth, (int)barHeight };
         SDL_RenderCopy(renderer, paddleTexture, NULL, &paddleRect);
         SDL_RenderPresent(renderer);
     }
