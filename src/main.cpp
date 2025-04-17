@@ -10,39 +10,28 @@
 #include <cmath>
 #include "../header/brick.h"
 #include "../header/menu.h"
+#include "../header/varball+bar.h"
+
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 TTF_Font* font = nullptr;
-float height = 720;
-float width = 480;
-float radius = 10;
-float speed = 400.f;  
-float ballVelX = speed; 
-float ballVelY = -speed;
-float toadogocX = (width / 2) - radius;
-float toadogocY = height - 15.01 - (2 * radius);
-int selectedOption = 0;
-int level = 1;
-int leveltmp=1;
+
 int main() {
     
     window = SDL_CreateWindow("Brick Breaker", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     Mix_AllocateChannels(64);
-    Mix_Music* menuMusic = Mix_LoadMUS("assets/menusound.mp3");
+   Mix_Music* menuMusic = Mix_LoadMUS("assets/menusound.mp3");
     Mix_Music* gameMusic = Mix_LoadMUS("assets/theme.mp3");
     Mix_Music* gameoverMusic = Mix_LoadMUS("assets/gameoversound.mp3");
     Mix_Chunk* hitsoundEffect = Mix_LoadWAV("assets/hitsound.wav");
     Mix_Chunk* popsoundEffect = Mix_LoadWAV("assets/pop.wav");
     Mix_Chunk* choosesoundEffect = Mix_LoadWAV("assets/choosesound.wav");
-
     bool quit = false;
     SDL_Event e;
     TTF_Init();
     font = TTF_OpenFont("PixelGame.otf", 40);
-    
-    
 SDL_Texture* paddleTexture = IMG_LoadTexture(renderer, "assets/thanh1.png");
 SDL_Texture* ballTexture = IMG_LoadTexture(renderer, "assets/pig.png");
 SDL_Texture* brickTexture = IMG_LoadTexture(renderer, "assets/br3.png");
@@ -50,13 +39,7 @@ std::string path = "assets/back" + std::to_string(leveltmp) + ".png";
 SDL_Texture* backgroundTexture = IMG_LoadTexture(renderer, path.c_str());
 menuLoop( backgroundTexture, menuMusic, choosesoundEffect);
 Mix_PlayMusic(gameMusic, -1);
-    float ballX = (width / 2) - radius;
-    float ballY = height - 20.01 - (2 * radius);
-    //thanh chan
-    float barWidth = width/2;  
-    float barHeight = 15;
-    float barX = (width - barWidth) / 2; 
-    float barY = height - 20;
+
     taogach();
 
     Uint32 lastTime = SDL_GetTicks();
@@ -84,25 +67,17 @@ Mix_PlayMusic(gameMusic, -1);
             SDL_RenderPresent(renderer);
             int textW, textH;
             SDL_Color textColor = {255, 255, 255, 255}; 
-    
-            
             SDL_Surface* textSurface = TTF_RenderText_Solid(font, "YOU WIN!", textColor);
             SDL_Texture* message1 = SDL_CreateTextureFromSurface(renderer, textSurface);
-    
-            
             TTF_SizeText(font, "YOU WIN!", &textW, &textH);
             SDL_Rect messageRect1 = {width / 2 - textW / 2, height / 3 - textH / 2, textW, textH};
-    
             SDL_RenderCopy(renderer, message1, NULL, &messageRect1);
             SDL_RenderPresent(renderer); 
-    
             SDL_FreeSurface(textSurface);
             SDL_DestroyTexture(message1);
-    
             SDL_Delay(2000);
             exit(0);
         }
-           
             speed += 40;
             taogach(); 
             ballX = toadogocX; 
@@ -117,40 +92,26 @@ Mix_PlayMusic(gameMusic, -1);
     std::string path = "assets/back" + std::to_string(leveltmp) + ".png";
     backgroundTexture = IMG_LoadTexture(renderer, path.c_str());
     brickTexture = IMG_LoadTexture(renderer, "assets/br3.png");
-    
-    
     renderBricks(renderer, brickTexture);
 int textW, textH;
 TTF_SizeText(font, "LEVEL UP!", &textW, &textH);
 SDL_Rect messageRect = {width / 2 - textW / 2, height / 2 - textH / 2 + 100, textW, textH}; 
-
 for (int i = 0; i < 8; i++) {
     SDL_RenderClear(renderer);
-    
-    
     SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-    
-    
-    
     SDL_Rect paddleRect = { (int)barX, (int)barY, barWidth, barHeight };
     SDL_RenderCopy(renderer, paddleTexture, NULL, &paddleRect);
-    
-    
     SDL_Rect ballRect = { (int)ballX, (int)ballY, radius * 2, radius * 2 };
     SDL_RenderCopy(renderer, ballTexture, NULL, &ballRect);
-
-    
     if (i % 2 == 0) {  
         SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "LEVEL UP!", textColor));
         SDL_RenderCopy(renderer, message, NULL, &messageRect);
         SDL_DestroyTexture(message);
     }
-
     SDL_RenderPresent(renderer);
     SDL_Delay(420);
 }
             lastTime = SDL_GetTicks(); 
-            
             ballVelX = (rand() % 2 == 0 ? -1 : 1) * speed;  
             ballVelY = -speed;
         }
@@ -166,25 +127,18 @@ for (int i = 0; i < 8; i++) {
             barX += 700.f * deltaTime;
             if (barX + barWidth > width) barX = width - barWidth; 
         }
-
-
         float dx = ballVelX * deltaTime;
-float dy = ballVelY * deltaTime;
-
-float stepSize = radius / 4.0f;
-int steps = std::ceil(std::max(std::abs(dx), std::abs(dy)) / stepSize);
-if (steps < 1) steps = 1;
-
-float stepX = dx / steps;
-float stepY = dy / steps;
-
-for (int i = 0; i < steps; i++) {
-    float nextX = ballX + stepX;
-    float nextY = ballY + stepY;
-
-    bool collisionX = false;
-    bool collisionY = false;
-
+        float dy = ballVelY * deltaTime;
+        float stepSize = radius / 4.0f;
+        int steps = std::ceil(std::max(std::abs(dx), std::abs(dy)) / stepSize);
+        if (steps < 1) steps = 1;
+        float stepX = dx / steps;
+        float stepY = dy / steps;
+        for (int i = 0; i < steps; i++) {
+        float nextX = ballX + stepX;
+        float nextY = ballY + stepY;
+        bool collisionX = false;
+        bool collisionY = false;
     for (auto& brick : bricks) {
         if (!brick.isDestroyed) {
             bool hitX = nextX + radius * 2 > brick.x && nextX < brick.x + brick.rect.w;
@@ -269,7 +223,6 @@ SDL_Texture* message2 = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_So
 SDL_RenderCopy(renderer, message2, NULL, &messageRect2);
 SDL_DestroyTexture(message2);
 
-
 TTF_SizeText(font, "Press ESC to quit", &textW, &textH);
 SDL_Rect messageRect3 = {width / 2 - textW / 2, height * 2 / 3 - textH / 2, textW, textH};
 SDL_Texture* message3 = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, "Press ESC to quit", textColor));
@@ -279,8 +232,6 @@ SDL_DestroyTexture(message3);
 SDL_RenderPresent(renderer);
 SDL_Delay(500);
 
-
-           
                 int response = -1;
                 bool waitingForInput = true;
                 while (waitingForInput) {
