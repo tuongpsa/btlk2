@@ -8,11 +8,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-
-    SDL_Window* window = nullptr;
-    SDL_Renderer* renderer = nullptr;
-    TTF_Font* font = nullptr;
-    float height = 720;
+#include "../header/brick.h"
+#include "../header/menu.h"
+SDL_Window* window = nullptr;
+SDL_Renderer* renderer = nullptr;
+TTF_Font* font = nullptr;
+float height = 720;
 float width = 480;
 float radius = 10;
 float speed = 400.f;  
@@ -20,168 +21,9 @@ float ballVelX = speed;
 float ballVelY = -speed;
 float toadogocX = (width / 2) - radius;
 float toadogocY = height - 15.01 - (2 * radius);
-SDL_Color textColor = {255, 0, 0, 255};
-void renderText(const char* text, int x, int y, SDL_Color color, bool isSelected) {
-    SDL_Color highlightColor = {255, 255, 0, 255}; 
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text, isSelected ? highlightColor : color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-   
-    int textWidth = surface->w;
-    int textHeight = surface->h;
-    SDL_Rect textRect = {x - textWidth / 2, y - textHeight / 2, textWidth, textHeight};
-
-    SDL_RenderCopy(renderer, texture, NULL, &textRect); 
-    SDL_FreeSurface(surface);
-    SDL_DestroyTexture(texture);
-}
-
 int selectedOption = 0;
-void menuLoop(SDL_Texture* backgroundTexture, Mix_Music* menusound, Mix_Chunk* choosesoundEffect) {
-    SDL_Event e;
-    bool running = true;
-    Mix_PlayMusic(menusound, -1);
-
-
-    SDL_Texture* butstartTexture = IMG_LoadTexture(renderer, "assets/buttonstart.png");
-    SDL_Texture* butexitTexture = IMG_LoadTexture(renderer, "assets/buttonexit.png");
-    SDL_Texture* butoptionsTexture = IMG_LoadTexture(renderer, "assets/buttonoptions.png");
-    SDL_Texture* butstartTextureHighlight = IMG_LoadTexture(renderer, "assets/choose1.png");
-    SDL_Texture* butexitTextureHighlight = IMG_LoadTexture(renderer, "assets/choose3.png");
-    //SDL_Texture* butoptionsTextureHighlight = IMG_LoadTexture(renderer, "assets/choose2.png");
-
-    while (running) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = false;
-            if (e.type == SDL_KEYDOWN) {
-                Mix_PlayChannel(-1, choosesoundEffect, 0);
-                if (e.key.keysym.sym == SDLK_UP) selectedOption = (selectedOption - 1 + 2) % 2; 
-                if (e.key.keysym.sym == SDLK_DOWN) selectedOption = (selectedOption + 1) % 2;   
-                if (e.key.keysym.sym == SDLK_RETURN) {
-                    if (selectedOption == 0) {
-                        Mix_HaltMusic();
-                        running = false;
-                    } /*else if (selectedOption == 1) {
-                        std::cout << "Options" << std::endl;
-                    }*/
-                    else if (selectedOption == 1) {
-                        
-                        exit(0);
-                    }
-                }
-            }
-        }
-    
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-        int buttonWidth = 200;
-        SDL_Rect butstartRect = {width / 2 - buttonWidth / 2, 250, buttonWidth, 50};
-        //SDL_Rect butoptionsRect = {width / 2 - buttonWidth / 2, 350, buttonWidth, 50};
-        SDL_Rect butexitRect = {width / 2 - buttonWidth / 2, 350, buttonWidth, 50};
-
-    
-        SDL_Texture* startTexture = (selectedOption == 0) ? butstartTextureHighlight : butstartTexture;
-        SDL_Texture* exitTexture = (selectedOption == 1) ? butexitTextureHighlight : butexitTexture;
-        //SDL_Texture* optionsTexture = (selectedOption == 1) ? butoptionsTextureHighlight : butoptionsTexture;
-    
-        SDL_RenderCopy(renderer, startTexture, NULL, &butstartRect);
-       // SDL_RenderCopy(renderer, optionsTexture, NULL, &butoptionsRect);
-        SDL_RenderCopy(renderer, exitTexture, NULL, &butexitRect);
-
-    
-        SDL_RenderPresent(renderer);
-    }
-
-    SDL_DestroyTexture(butstartTexture);
-    SDL_DestroyTexture(butexitTexture);
-    SDL_DestroyTexture(butoptionsTexture);
-    SDL_DestroyTexture(butstartTextureHighlight);
-    SDL_DestroyTexture(butexitTextureHighlight);
-    //SDL_DestroyTexture(butoptionsTextureHighlight);
-}
-
-
-int maxbrick = 5;
 int level = 1;
 int leveltmp=1;
-struct Brick {
-    float x, y;
-    int hp;
-    bool isDestroyed;
-    SDL_Rect rect;
-};
-std::vector<Brick> bricks;
-
-void taogach() {
-    float brickWidth = 60;
-    float brickHeight = 20;
-    bricks.clear();
-
-    for (int i = 0; i < maxbrick; i++) {
-        bool validPosition = false;
-        Brick brick;
-
-        while (!validPosition) {
-            brick.x = 30 + rand() % (int)(480 - brickWidth - 30 - 30);
-            brick.y = 30 + rand() % (int)(720 / 2);
-            brick.isDestroyed = false;
-            brick.hp = 1 + rand() % 3;
-            brick.rect = { (int)brick.x, (int)brick.y, (int)brickWidth, (int)brickHeight };
-
-            validPosition = true;
-
-            
-            for (const auto& other : bricks) {
-                if (SDL_HasIntersection(&brick.rect, &other.rect)) {
-                    validPosition = false; 
-                    break;
-                }
-            }
-        }
-
-        bricks.push_back(brick);
-    }
-}
-
-    
-void renderBricks(SDL_Renderer* renderer, SDL_Texture* brickTexture) {
-    for (const auto& brick : bricks) {
-        if (brick.isDestroyed==false) {
-            SDL_Rect brickRect = { (int)brick.rect.x, (int)brick.rect.y, (int)brick.rect.w, (int)brick.rect.h };
-            SDL_RenderCopy(renderer, brickTexture, NULL, &brickRect);
-        }
-    }
-}
-void checkBrickCollisions(float& ballX, float& ballY, float radius, float& ballVelX, float& ballVelY) {
-    for (auto& brick : bricks) {
-        if (brick.isDestroyed==false) {
-            if (ballX + radius * 2 > brick.x-1 && ballX < brick.x + brick.rect.w-1 &&
-                ballY + radius * 2 > brick.y && ballY < brick.y + brick.rect.h) {
-                brick.hp--;
-                if(brick.hp <=0){
-                    brick.isDestroyed = true;
-                    
-                        
-                    
-                }
-                ballVelY = -ballVelY;
-            }
-        }
-    }
-}
-bool isAllBricksDestroyed() {
-    for (const auto& brick : bricks) {
-        if (brick.isDestroyed==false) {
-            return false; 
-        }
-    }
-    
-    
-    return true; 
-}
-
-
-
 int main() {
     
     window = SDL_CreateWindow("Brick Breaker", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
@@ -376,7 +218,6 @@ for (int i = 0; i < steps; i++) {
         }
     }
 
-    // Chỉ cập nhật vị trí nếu không có va chạm
     if (!collisionX) {
         ballX = nextX;
     }
@@ -477,7 +318,7 @@ SDL_Delay(500);
                     bricks.clear();
                     taogach(); 
                 
-                    lastTime = SDL_GetTicks();  // Đặt lại thời gian sau khi reset
+                    lastTime = SDL_GetTicks();
                 } else {
                     quit = true; 
                 }
@@ -521,5 +362,6 @@ SDL_DestroyTexture(levelMessage);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    std::cout<<"Quited";
     return 0;
 }
