@@ -10,22 +10,22 @@ Brick Breaker là một game đơn giản được phát triển bằng ngôn ng
 Dưới đây là cấu trúc thư mục và mô tả các thành phần chính:
 
 ```
-├── src/                # Mã nguồn chính của game
-│   ├── main.cpp        # khởi tạo,vòng lặp chính,hiển thị menu screen&win screen
-│   ├── brick.cpp       # Xử lý gạch trong game:tao gạch,check va chạm,kiểm tra điều kiện level up
-│   ├── gameover_screen.cpp      # xử lí màn hình khi game over
-│   ├── collision.cpp   # Xử lý logic va chạm bóng với gạch kĩ hơn,fix bug bóng chạy xuyên gạch
-│   ├── levelup_effect.cpp       # Xử lý hiệu ứng chữ "level up"
-│   ├── menu.cpp        # Xử lý logic menu
-│   ├── resource.cpp    # Quản lí tài nguyên
-│   ├── varball+bar.cpp # Thiết lập các giá trị cơ bản cho bóng và thanh
-│   ├── win_screen.cpp  # Thiết lập màn hình win game
-├── header              # Chứa các tệp header
-├── assets/             # Tài nguyên của game(bao gồm cả âm thanh và hình ảnh dùng trong game)
-├── MinGW/              # Công cụ và thư viện để biên dịch các ứng dụng C++
-├── game.exe            # File game.exe
-├── PixelGame.ttf       # Font chữ sử dụng trong game
-├── README.md           # Hướng dẫn chi tiết
+├── src/                	# Mã nguồn chính của game
+│   ├── main.cpp        	# khởi tạo,vòng lặp chính,hiển thị menu screen&win screen
+│   ├── brick.cpp       	# Xử lý gạch trong game:tao gạch,check va chạm,kiểm tra điều kiện level up
+│   ├── gameover_screen.cpp     # xử lí màn hình khi game over
+│   ├── collision.cpp   	# Xử lý logic va chạm bóng với gạch kĩ hơn,fix bug bóng chạy xuyên gạch
+│   ├── levelup_effect.cpp      # Xử lý hiệu ứng chữ "level up"
+│   ├── menu.cpp        	# Xử lý logic menu
+│   ├── resource.cpp    	# Quản lí tài nguyên
+│   ├── varball+bar.cpp 	# Thiết lập các giá trị cơ bản cho bóng và thanh
+│   ├── win_screen.cpp  	# Thiết lập màn hình win game
+├── header              	# Chứa các tệp header
+├── assets/             	# Tài nguyên của game(bao gồm cả âm thanh và hình ảnh dùng trong game)
+├── MinGW/              	# Công cụ và thư viện để biên dịch các ứng dụng C++
+├── game.exe           		# File game.exe
+├── PixelGame.ttf       	# Font chữ sử dụng trong game
+├── README.md           	# Hướng dẫn chi tiết
 ```
 
 ---
