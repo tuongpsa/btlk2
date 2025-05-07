@@ -153,4 +153,5 @@ Dùng SDL_mixer để:
    9.2 Thêm Hp cho người chơi.
    9.3 Hiện tại khi level thì sẽ tăng số lượng gạch và tăng tốc độ bóng,có thể rút ngắn chiều dài paddle để tăng độ khó.
    9.4 Thêm các hiệu ứng cho gạch khi bị vỡ (tạo nhiều particle bay ra).
+___
    
